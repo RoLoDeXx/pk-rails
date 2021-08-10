@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  spot_id: 1
+  time_entry: 2021-08-03 14:09:34
+  time_exit: 2021-08-03 14:09:34
+  fare: 1.5
+  driver_id: 1
+
+two:
+  spot_id: 1
+  time_entry: 2021-08-03 14:09:34
+  time_exit: 2021-08-03 14:09:34
+  fare: 1.5
+  driver_id: 1

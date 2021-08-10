@@ -1,0 +1,3 @@
+parking_exit_job:
+  cron: "*/1 * * * *"
+  class: "LeaveWorker"
