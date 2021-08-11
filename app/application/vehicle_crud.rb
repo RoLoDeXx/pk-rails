@@ -7,7 +7,6 @@ class VehicleCrud
         owner_driver_id: params[:owner_driver_id],
         is_two_wheeler: params[:is_two_wheeler],
       )
-      @vehicle
     else
       raise StandardError.new("Driver id does not existo")
     end

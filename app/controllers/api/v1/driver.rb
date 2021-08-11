@@ -5,8 +5,8 @@ module API
         desc 'get all drivers'
         get do
           @drivers = ::Driver.all
-          present @drivers, with: API::V1::Entities::Driver
-          # Ticket.all
+          # present @drivers, with: API::V1::Entities::Driver
+          Ticket.all
         end
 
         desc 'create a new driver'
