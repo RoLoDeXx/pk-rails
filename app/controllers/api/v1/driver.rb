@@ -1,11 +1,11 @@
 module API
   module V1
     class Driver < Grape::API
-      require_relative '../../../application/driver_crud'
       resource :driver do
         desc 'get all drivers'
         get do
-          DriverCrud.retrive_all
+          @drivers = ::Driver.all
+          present @drivers, with: API::V1::Entities::Driver
           # Ticket.all
         end
 
@@ -15,8 +15,11 @@ module API
           requires :name, type: String
         end
         post do
-          driver_obj = DriverCrud.new
-          driver_obj.insert(params)
+          @driver = ::Driver.create!(
+            license: params[:license],
+            name: params[:name],
+          )
+          present @driver, with: API::V1::Entities::Driver
         end
       end
     end

@@ -5,7 +5,7 @@ module API
       resource :vehicle do
         desc "Get vehicles"
         get do
-          present VehicleCrud.retrive_all
+          present VehicleCrud.retrive_all, with: API::V1::Entities::Vehicle
         end
 
         desc "create new vehicle"
@@ -16,6 +16,7 @@ module API
           requires :is_two_wheeler, type: Boolean
         end
         post do
+          # present VehicleCrud.new(params), with: API::V1::Entities::Vehicle
           VehicleCrud.new(params)
         end
       end

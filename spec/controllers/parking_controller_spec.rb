@@ -30,12 +30,12 @@ RSpec.describe API::Base, type: :request do
     end
   end
 
-  context "check in with" do
+  describe "check in with" do
     before(:each) do
       @vehicle = Vehicle.find_by(id: 1)
     end
 
-    describe 'correct params' do
+    context 'correct params' do
       before do
         # Set the header to application/json
         post '/api/v1/parking/checkin', params: {"vehicle_id": @vehicle.id}
@@ -49,7 +49,7 @@ RSpec.describe API::Base, type: :request do
       end
     end
 
-    describe 'wrong params' do
+    context 'wrong params' do
       before do
         post '/api/v1/parking/checkin'
       end
@@ -58,7 +58,7 @@ RSpec.describe API::Base, type: :request do
       end
     end
 
-    # describe 'non existent vehicle' do
+    # context 'non existent vehicle' do
     #   before do
     #     post '/api/v1/parking/checkin', params: {"vehicle_id": 999}
     #     @err = StandardError.new("Vehicle can't be mapped to a parking spot")
@@ -68,7 +68,7 @@ RSpec.describe API::Base, type: :request do
     #   end
     # end
 
-    # describe 'vehicle already parked' do
+    # context 'vehicle already parked' do
     #   before do
     #     post '/api/v1/parking/checkin', params: {"vehicle_id": @vehicle.id}
     #   end
@@ -77,7 +77,7 @@ RSpec.describe API::Base, type: :request do
     #   end
     # end
 
-    # describe 'checkin with non available space' do
+    # context 'checkin with non available space' do
     #   before do
     #     post '/api/v1/parking/checkin', params: {"vehicle_id": 2}
     #   end
@@ -87,8 +87,8 @@ RSpec.describe API::Base, type: :request do
     # end
   end
 
-  context "Checkout" do
-    describe 'with correct params' do
+  describe "Checkout" do
+    context 'with correct params' do
       before do
         # Set the header to application/json
         post '/api/v1/parking/checkout', params: {"spot_id": 2}
@@ -104,7 +104,7 @@ RSpec.describe API::Base, type: :request do
       end
     end
 
-    describe 'with wrong params' do
+    context 'with wrong params' do
       before do
         # Set the header to application/json
         post '/api/v1/parking/checkout'
@@ -114,7 +114,7 @@ RSpec.describe API::Base, type: :request do
       end
     end
 
-    describe 'with wrong id' do
+    context 'with wrong id' do
       before do
         # Set the header to application/json
         post '/api/v1/parking/checkout', params: {"spot_number": 999}
