@@ -6,7 +6,7 @@ RSpec.describe Vehicle, type: :model do
   end
 
   it 'ensure @vehicle can be created' do
-    expect(create(:vehicle)).to change { Vehicle.count }.by(1)
+    expect { create(:vehicle) }.to change { Vehicle.count }.by(1)
   end
 
   it 'checks @vehicle read' do
@@ -14,8 +14,8 @@ RSpec.describe Vehicle, type: :model do
   end
 
   it 'checks update' do
-    @vehicle.update(name: "Mr Samarth Sharma")
-    expect(Vehicle.find_by_name("Mr Samarth Sharma")).to eq(@vehicle)
+    @vehicle.update(number_plate: "SAM12121")
+    expect(Vehicle.find_by(id: @vehicle.id)).to eq(@vehicle)
   end
 
   it 'checks destroy' do

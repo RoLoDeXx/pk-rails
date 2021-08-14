@@ -4,7 +4,7 @@ class ParkingSpot < ApplicationRecord
       spots = ParkingSpot.where(is_available: true, for_bikes_only: vehicle[:is_two_wheeler])
       spots.first
     else
-      raise StandardError.new("Vehicle can't be mapped to a parking spot")
+      raise StandardError.new("Vehicle does not exist")
     end
   end
 

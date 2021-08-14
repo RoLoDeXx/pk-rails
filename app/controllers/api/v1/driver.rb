@@ -5,8 +5,8 @@ module API
         desc 'get all drivers'
         get do
           @drivers = ::Driver.all
-          # present @drivers, with: API::V1::Entities::Driver
-          Ticket.all
+          present @drivers, with: API::V1::Entities::Driver
+          # Ticket.all
         end
 
         desc 'create a new driver'
@@ -19,6 +19,28 @@ module API
             license: params[:license],
             name: params[:name],
           )
+          present @driver, with: API::V1::Entities::Driver
+        end
+
+        desc 'update a driver'
+        params do
+          requires :license, type: String
+          requires :name, type: String
+          requires :id, type: Integer
+        end
+        put "/:id/update" do
+          @driver = ::Driver.find(params[:id]).update(
+            license: params[:license],
+            name: params[:name],
+          )
+        end
+
+        desc 'delete a driver'
+        params do
+          requires :id, type: Integer
+        end
+        delete "/:id/delete" do
+          @driver = ::Driver.find(params[:id]).destroy!
           present @driver, with: API::V1::Entities::Driver
         end
       end

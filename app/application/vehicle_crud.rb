@@ -12,7 +12,7 @@ class VehicleCrud
     end
   end
 
-  def self.retrive_all
-    Vehicle.all
+  def fetch_vehicle
+    @vehicle
   end
 end

@@ -1,127 +1,93 @@
 require 'rails_helper'
 RSpec.describe API::Base, type: :request do
-  describe 'GET /api/v1/parking/' do
+  context 'GET parking spots' do
     before do
-      # Set the header to application/json
-      # Make the actual request to /api/status using GET
+      @parking_spot = create(:parking_spot)
       get '/api/v1/parking'
     end
+
     it 'Gets info about parking lot and returns HTTP status 200' do
       expect(response.status).to eq 200
+      result = JSON.parse(response.body)
+      expect(result.first.keys).to(match_array(%w(id for_bikes_only is_available spot_number)))
+      expect(result.first['id']).to(eq(@parking_spot.id))
+      expect(result.first['for_bikes_only']).to(eq(@parking_spot.for_bikes_only))
+      expect(result.first['is_available']).to(eq(@parking_spot.is_available))
+      expect(result.first['spot_number']).to(eq(@parking_spot.spot_number))
     end
   end
-  describe 'POST /api/v1/parking/ with correct params' do
+  context 'Add a parking spot' do
     before do
       # Set the header to application/json
-      post '/api/v1/parking', params: {"spot_number": 9, "for_bikes_only": true}
+      @s_num = rand(1...10000)
+      @random_boolean = [true, false].sample
+      post '/api/v1/parking', params: {"spot_number": @s_num, "for_bikes_only": @random_boolean}
     end
-    it 'Create a new driver expect code to be 201' do
+    it 'Create a new parking expect code to be 201' do
       expect(response.status).to eq 201
+      result = JSON.parse(response.body)
+      expect(result.keys).to(match_array(%w(id for_bikes_only is_available spot_number)))
+      expect(result['spot_number']).to(eq(@s_num))
+      expect(result['for_bikes_only']).to(eq(@random_boolean))
     end
   end
 
-  describe 'POST /api/v1/parking/ with wrong params' do
+  context 'Wrong/no paramters in parking spot creation' do
     before do
       # Set the header to application/json
       post '/api/v1/parking'
     end
-    it 'Create a new driver expect code to be 201' do
-      expect(response.status).to eq 400
+    it 'Create a new parking expect code to be 500' do
+      expect(response.status).to eq 500
     end
   end
 
-  describe "check in with" do
-    before(:each) do
-      @vehicle = Vehicle.find_by(id: 1)
+  context 'update parking spot' do
+    before do
+      # Set the header to application/json
+      @parking_spot = create(:parking_spot)
+      put '/api/v1/parking/' + @parking_spot.id.to_s + '/update', params: {"spot_number": 9, "for_bikes_only": true, "is_available": true}
     end
-
-    context 'correct params' do
-      before do
-        # Set the header to application/json
-        post '/api/v1/parking/checkin', params: {"vehicle_id": @vehicle.id}
-      end
-      it 'to create a check in ticket' do
-        expect(response.status).to eq 201
-      end
-
-      it 'to have correct json response' do
-        expect JSON.parse(response.body)
-      end
+    it 'updates parking spot expect code to be 201' do
+      expect(response.status).to eq 200
     end
-
-    context 'wrong params' do
-      before do
-        post '/api/v1/parking/checkin'
-      end
-      it 'to create a check in ticket' do
-        expect(response.status).to eq 400
-      end
-    end
-
-    # context 'non existent vehicle' do
-    #   before do
-    #     post '/api/v1/parking/checkin', params: {"vehicle_id": 999}
-    #     @err = StandardError.new("Vehicle can't be mapped to a parking spot")
-    #   end
-    #   it 'to create a check in ticket' do
-    #     expect { response }.to raise_error.call(@err)
-    #   end
-    # end
-
-    # context 'vehicle already parked' do
-    #   before do
-    #     post '/api/v1/parking/checkin', params: {"vehicle_id": @vehicle.id}
-    #   end
-    #   it 'to create a check in ticket' do
-    #     expect { response }.to raise_error
-    #   end
-    # end
-
-    # context 'checkin with non available space' do
-    #   before do
-    #     post '/api/v1/parking/checkin', params: {"vehicle_id": 2}
-    #   end
-    #   it 'Create a check in ticket' do
-    #     expect(response.status).to eq 400
-    #   end
-    # end
   end
 
-  describe "Checkout" do
-    context 'with correct params' do
-      before do
-        # Set the header to application/json
-        post '/api/v1/parking/checkout', params: {"spot_id": 2}
-      end
-      it 'check out' do
-        # debugger
-        expect(response.status).to eq 201
-        puts response.status
-      end
-
-      it 'to have correct json response' do
-        expect JSON.parse(response.body)
-      end
+  context 'update parking spot with incomplete params' do
+    before do
+      # Set the header to application/json
+      @parking_spot = create(:parking_spot)
+      put '/api/v1/parking/' + @parking_spot.id.to_s + '/update', params: {"is_available": true}
     end
-
-    context 'with wrong params' do
-      before do
-        # Set the header to application/json
-        post '/api/v1/parking/checkout'
-      end
-      it 'check out' do
-        expect(response.status).to eq 400
-      end
+    it 'updates parking spot expect code to be 500' do
+      expect(response.status).to eq 500
     end
+  end
 
-    context 'with wrong id' do
-      before do
-        # Set the header to application/json
-        post '/api/v1/parking/checkout', params: {"spot_number": 999}
-      end
-      it 'check out' do
-        expect { response }
-      end
+  context 'delete parking spot' do
+    before do
+      # Set the header to application/json
+      @parking_spot = create(:parking_spot)
+      delete '/api/v1/parking/' + @parking_spot.id.to_s + '/delete', params: {"is_available": true}
+    end
+    it 'deletes parking spot expect code to be 200' do
+      expect(response.status).to eq 200
+      result = JSON.parse(response.body)
+      expect(result.keys).to(match_array(%w(id for_bikes_only is_available spot_number)))
+      expect(result['id']).to(eq(@parking_spot.id))
+      expect(result['for_bikes_only']).to(eq(@parking_spot.for_bikes_only))
+      expect(result['is_available']).to(eq(@parking_spot.is_available))
+      expect(result['spot_number']).to(eq(@parking_spot.spot_number))
+    end
+  end
+
+  context 'delete parking spot' do
+    before do
+      # Set the header to application/json
+      delete '/api/v1/parking/-1/delete', params: {"is_available": true}
+    end
+    it 'try to delete random parking spot that doesn\'t exist' do
+      expect(response.status).to eq 404
     end
   end
 end

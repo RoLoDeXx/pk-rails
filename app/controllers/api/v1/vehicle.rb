@@ -1,3 +1,4 @@
+
 module API
   module V1
     class Vehicle < Grape::API
@@ -8,7 +9,7 @@ module API
         desc "Get vehicles"
         get do
           type = :vehicle
-          present VehicleCrud.retrive_all, with: API::V1::Entities::Vehicle, type: type
+          present ::Vehicle.all, with: API::V1::Entities::Vehicle, type: type
         end
 
         desc "create new vehicle"
@@ -19,8 +20,36 @@ module API
           requires :is_two_wheeler, type: Boolean
         end
         post do
-          # present VehicleCrud.new(params), with: API::V1::Entities::Vehicle
-          VehicleCrud.new(params)
+          type = :vehicle
+          present VehicleCrud.new(params).fetch_vehicle, with: API::V1::Entities::Vehicle, type: type
+          # @res.vehicle
+          # debugger
+        end
+
+        desc "edit vehicle"
+        params do
+          requires :number_plate, type: String
+          requires :make, type: String
+          requires :owner_driver_id, type: Integer
+          requires :is_two_wheeler, type: Boolean
+          requires :id, type: Integer
+        end
+        put "/:id/update" do
+          ::Vehicle.find(params[:id]).update(
+            number_plate: params[:number_plate],
+            make: params[:make],
+            owner_driver_id: params[:owner_driver_id],
+            is_two_wheeler: params[:is_two_wheeler],
+          )
+        end
+
+        desc "Delete vehicle"
+        params do
+          requires :id, type: Integer
+        end
+        delete "/:id/delete" do
+          type = :vehicle
+          present ::Vehicle.find(params[:id]).destroy!, with: API::V1::Entities::Vehicle, type: type
         end
 
         desc 'check in the parking spot'
@@ -28,19 +57,19 @@ module API
           requires :vehicle_id, type: Integer
         end
         post '/:vehicle_id/checkin' do
-          type = :ticket
-          @ticket = Checkin.entry(params[:vehicle_id])
-          present @ticket, with: API::V1::Entities::Vehicle, type: type
+          # type = :ticket
+          Checkin.new(params[:vehicle_id])
+          # present @ticket, with: API::V1::Entities::Vehicle, type: type
         end
 
         desc 'check out from parking spot'
         params do
-          requires :spot_id, type: Integer
+          requires :vehicle_id, type: Integer
         end
-        post '/:spot_id/checkout' do
-          type = :ticket
-          @ticket = Checkout.leave(params[:spot_id])
-          present @ticket, with: API::V1::Entities::Vehicle, type: type
+        post '/:vehicle_id/checkout' do
+          # type = :ticket
+          Checkout.new(params[:vehicle_id])
+          # present @ticket, with: API::V1::Entities::Vehicle, type: type
         end
       end
     end
