@@ -3,12 +3,12 @@ class Checkout
   def initialize(vehicle_id)
     vehicle_obj = Vehicle.find_by(id: vehicle_id)
     unless vehicle_obj
-      raise StandardError.new("Vehicle does not exist")
+      raise NonExistentEntity.new.message("Vehicle")
     end
 
     spot = ParkingSpot.find_by(occupied_by: vehicle_id)
     unless spot
-      raise StandardError.new("Vehicle not in garage")
+      raise VehicleNotInGarage.new.message
     end
     @ticket = leave(vehicle_obj, spot)
   end
@@ -16,4 +16,8 @@ class Checkout
   def leave(vehicle_obj, spot)
     vehicle_obj.checkout_ticket(spot)
   end
+
+  def fetch_ticket
+   @ticket
+  end 
 end

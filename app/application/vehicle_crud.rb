@@ -1,4 +1,5 @@
 class VehicleCrud
+  require_relative "./exceptions"
   def initialize(params)
     if Driver.exists?(params[:owner_driver_id])
       @vehicle = Vehicle.create!(

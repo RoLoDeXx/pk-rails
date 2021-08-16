@@ -1,28 +1,35 @@
-require 'rails_helper'
-RSpec.describe Worker, type: :model do
-    context "Worker with correct params" do
-        before do 
-            
-        end
+# require 'rails_helper'
+# RSpec.describe Worker, type: :model do
+#   describe 'Methods' do
+#     context "run cron job with correct forms" do
+#       before do
+#         @vehicle = create(:vehicle)
+#         @spot = create(:parking_spot)
+#         @ticket = Checkin.new(@vehicle.id)
+#       end
+#       it "Expect to check in a vehicle" do
+#         @ticket.entry(@vehicle, @spot)
+#       end
+#     end
 
-        it "" do 
-            expect 
-        end
-    end
+#     context "non parkable params" do
+#       before do
+#         @vehicle = create(:vehicle)
+#         @spot = create(:parking_spot, is_available: false)
+#         @ticket = Checkin.new(@vehicle.id)
+#       end
+#       it "Expect to check in a vehicle" do
+#         expect { @ticket.entry(@vehicle, @spot) }.to raise_error
+#       end
+#     end
 
-    context "Worker with incorrect params" do
-        
-    end
-
-    # class Worker
-    #     def self.perform(time_frame=1)
-    #       Ticket.where(time_exit: nil).find_each(batch_size: 1000) do |ticket|
-    #         current_time = Time.zone.now
-    #         hours = ((current_time - ticket.time_entry) / 1.hour).ceil
-    #         if hours >= time_frame
-    #           puts("Check out driver with id (#{ticket.id}) to clear parking spot number (#{ticket.spot_id})")
-    #         end
-    #       end
-    #     end
-    #   end      
-end
+#     context "no vehicle" do
+#       before do
+#         @spot = create(:parking_spot, is_available: false)
+#       end
+#       it "Expect to check in a vehicle" do
+#         expect { Checkin.new(-99) }.to raise_error(StandardError)
+#       end
+#     end
+#   end
+# end

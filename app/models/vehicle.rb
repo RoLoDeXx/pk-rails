@@ -14,7 +14,7 @@ class Vehicle < ApplicationRecord
   end
 
   def checkout_ticket(spot)
-    if Ticket.exists?(spot_id: spot[:id]) && ParkingSpot.exists?(spot_number: spot[:id])
+    if Ticket.exists?(spot_id: spot[:id])
       spot.update(is_available: true, occupied_by: nil)
       ticket = Ticket.find_by(spot_id: spot[:id])
 

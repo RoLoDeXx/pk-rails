@@ -1,12 +1,14 @@
-# class to implement check in flow
-require_relative "./exceptions"
 class Checkin
+  require_relative "./exceptions"
   def initialize(vehicle_id)
     vehicle_obj = Vehicle.find_by(id: vehicle_id)
+    unless vehicle_obj
+      raise NonExistentEntity.new.message("Vehicle")
+    end
 
     spot = ParkingSpot.get_empty_slot(vehicle_obj)
     if !spot
-      raise StandardError.new("No spot available")
+      raise NoParkingSpot.new.message
     end
 
     @ticket = entry(vehicle_obj, spot)
@@ -14,5 +16,9 @@ class Checkin
 
   def entry(vehicle_obj, spot)
     vehicle_obj.checkin_ticket(spot)
+  end
+
+  def fetch_ticket
+    @ticket
   end
 end

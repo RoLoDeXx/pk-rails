@@ -57,9 +57,9 @@ module API
           requires :vehicle_id, type: Integer
         end
         post '/:vehicle_id/checkin' do
-          # type = :ticket
-          Checkin.new(params[:vehicle_id])
-          # present @ticket, with: API::V1::Entities::Vehicle, type: type
+          type = :ticket
+          present Checkin.new(params[:vehicle_id]).fetch_ticket, with: API::V1::Entities::Vehicle, type: type
+          #  @ticket, 
         end
 
         desc 'check out from parking spot'
@@ -67,8 +67,8 @@ module API
           requires :vehicle_id, type: Integer
         end
         post '/:vehicle_id/checkout' do
-          # type = :ticket
-          Checkout.new(params[:vehicle_id])
+          type = :ticket
+          present Checkout.new(params[:vehicle_id]).fetch_ticket, with: API::V1::Entities::Vehicle, type: type
           # present @ticket, with: API::V1::Entities::Vehicle, type: type
         end
       end

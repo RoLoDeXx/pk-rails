@@ -12,7 +12,7 @@ default: &default
 development:
   adapter: postgresql
   encoding: unicode
-  database: parking_test
+  database: parking_dev
   pool: 5
   username: gocomet
   password: gocomet123

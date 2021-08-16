@@ -47,10 +47,10 @@ RSpec.describe API::Base, type: :request do
       it 'to create a check in ticket' do
         expect(response.status).to eq 201
         result = JSON.parse(response.body)
-        expect(result["ticket"].keys).to(match_array(%w(id spot_id time_entry time_exit fare driver_id created_at updated_at)))
-        expect(result["ticket"]['id']).to(eq(@ticket.id))
-        expect(result["ticket"]['spot_id']).to(eq(@ticket.spot_id))
-        expect(result["ticket"]['driver_id']).to(eq(@driver.id))
+        expect(result.keys).to(match_array(%w(id parking_spot checkin_time checkout_time fare driver_id)))
+        expect(result['id']).to(eq(@ticket.id))
+        expect(result["parking_spot"]).to(eq(@ticket.spot_id))
+        expect(result['driver_id']).to(eq(@driver.id))
       end
     end
 
