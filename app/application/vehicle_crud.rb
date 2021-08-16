@@ -9,7 +9,7 @@ class VehicleCrud
         is_two_wheeler: params[:is_two_wheeler],
       )
     else
-      raise StandardError.new("Driver id does not existo")
+      raise NonExistentDriver.new.message
     end
   end
 

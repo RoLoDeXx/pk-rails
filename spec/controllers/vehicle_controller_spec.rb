@@ -6,8 +6,9 @@ RSpec.describe API::Base, type: :request do
       @vehicle = create(:vehicle, number_plate: "ABCDE", make: "abc", owner_driver_id: @driver.id, is_two_wheeler: true)
       get '/api/v1/vehicle'
     end
+    include_examples 'successful request'
+
     it 'Gets info about vehicle lot and returns HTTP status 200' do
-      expect(response.status).to eq 200
       result = JSON.parse(response.body)
       expect(result.first.keys).to(match_array(%w(id make_and_color number_plate is_two_wheeler driver_id)))
       expect(result.first['id']).to(eq(@vehicle.id))
@@ -30,8 +31,10 @@ RSpec.describe API::Base, type: :request do
       }
       post '/api/v1/vehicle', params: params
     end
-    it 'Create a new vehicle expect code to be 201' do
-      expect(response.status).to eq 201
+    include_examples 'successful create request'
+    it "response body" do
+      result = JSON.parse(response.body)
+      expect(result.keys).to(match_array(%w(id driver_id is_two_wheeler make_and_color number_plate)))
     end
   end
 
@@ -44,8 +47,8 @@ RSpec.describe API::Base, type: :request do
         post '/api/v1/vehicle/' + @vehicle.id.to_s + '/checkin'
         @ticket = Ticket.find_by(driver_id: @driver.id)
       end
+      include_examples 'successful create request'
       it 'to create a check in ticket' do
-        expect(response.status).to eq 201
         result = JSON.parse(response.body)
         expect(result.keys).to(match_array(%w(id parking_spot checkin_time checkout_time fare driver_id)))
         expect(result['id']).to(eq(@ticket.id))
@@ -61,8 +64,8 @@ RSpec.describe API::Base, type: :request do
       it 'to create a check in ticket' do
         result = JSON.parse(response.body)
         # expect(result["error"]).to eq("Vehicle does not exist")
-        expect(result["error"]).to eq("wrong number of arguments (given 1, expected 0)")
-        expect(response.status).to eq 500
+        expect(result["error"]).to eq("Vehicle does not exist")
+        expect(response.status).to eq 404
       end
     end
 
@@ -105,15 +108,13 @@ RSpec.describe API::Base, type: :request do
         @ticket = Ticket.find_by(driver_id: @driver.id)
         post '/api/v1/vehicle/' + @vehicle.id.to_s + '/checkout'
       end
-      it 'check out' do
-        # debugger
-        # expect(response.status).to eq 201
-        # result = JSON.parse(response.body)
-
-        # debugger
-        # expect(parsed_response.keys).to eq(3)
-
-        # # respone.body.should == model.to_json
+      include_examples 'successful create request'
+      it 'to create a check in ticket' do
+        result = JSON.parse(response.body)
+        expect(result.keys).to(match_array(%w(id parking_spot checkin_time checkout_time fare driver_id)))
+        expect(result['id']).to(eq(@ticket.id))
+        expect(result["parking_spot"]).to(eq(@ticket.spot_id))
+        expect(result['driver_id']).to(eq(@driver.id))
       end
 
       context 'with wrong id' do
@@ -123,10 +124,10 @@ RSpec.describe API::Base, type: :request do
         end
         it 'check out' do
           result = JSON.parse(response.body)
-          expect(result["error"]).to eq("wrong number of arguments (given 1, expected 0)")
+          expect(result["error"]).to eq("Vehicle does not exist")
 
           # expect(result["error"]).to eq("Vehicle does not exist")
-          expect(response.status).to eq 500
+          expect(response.status).to eq 404
         end
       end
     end

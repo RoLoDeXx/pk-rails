@@ -8,8 +8,8 @@ RSpec.describe API::V1::Driver, type: :request do
         @driver = create(:driver)
         get '/api/v1/driver'
       end
+      include_examples 'successful request'
       it 'Get info about drivers and returns HTTP status 200' do
-        expect(response.status).to eq 200
         result = JSON.parse(response.body)
         expect(result.first.keys).to(match_array(%w(id name license)))
         expect(result.first['id']).to(eq(@driver.id))
@@ -22,8 +22,8 @@ RSpec.describe API::V1::Driver, type: :request do
       before do
         post '/api/v1/driver', params: {"name": "Dem", "license": "ABCD"}
       end
+      include_examples 'successful create request'
       it 'Create a new driver expect code to be 201' do
-        expect(response.status).to eq 201
         result = JSON.parse(response.body)
         expect(result.keys).to(match_array(%w(id name license)))
         expect(result['license']).to(eq("ABCD"))
@@ -47,9 +47,7 @@ RSpec.describe API::V1::Driver, type: :request do
         @driver = create(:driver)
         put '/api/v1/driver/' + @driver.id.to_s + '/update', params: {"name": "Joe", "license": "12345"}
       end
-      it 'edit driver expect code to be 201' do
-        expect(response.status).to eq 200
-      end
+      include_examples 'successful request'
     end
 
     context 'edit driver by id with wrong params' do
@@ -68,8 +66,8 @@ RSpec.describe API::V1::Driver, type: :request do
         @driver = create(:driver)
         delete '/api/v1/driver/' + @driver.id.to_s + '/delete'
       end
+      include_examples 'successful request'
       it 'delete and expect code to be 200' do
-        expect(response.status).to eq 200
         result = JSON.parse(response.body)
         expect(result.keys).to(match_array(%w(id name license)))
         expect(result['id']).to(eq(@driver.id))

@@ -1,15 +1,21 @@
-class NonExistentEntity < StandardError
-  def initialize(class_name="class_name")
-    @entity = class_name
-  end
-
+class NonExistentDriver < StandardError
   def message
     ERR_MSG
   end
 
   private
 
-  ERR_MSG = "No entity for #{@entity} exists".freeze
+  ERR_MSG = "Driver does not exist".freeze
+end
+
+class NonExistentVehicle < StandardError
+  def message
+    ERR_MSG
+  end
+
+  private
+
+  ERR_MSG = "Vehicle does not exist".freeze
 end
 
 class NoParkingSpot < StandardError

@@ -2,7 +2,7 @@ class Checkin
   def initialize(vehicle_id)
     vehicle_obj = Vehicle.find_by(id: vehicle_id)
     unless vehicle_obj
-      raise NonExistentEntity.new.message("Vehicle")
+      raise NonExistentVehicle.new.message
     end
 
     spot = ParkingSpot.get_empty_slot(vehicle_obj)

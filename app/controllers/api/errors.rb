@@ -7,6 +7,8 @@ module API
           error_response(message: e.message, status: 403)
         elsif e.message == "No parking spot available"
           error_response(message: e.message, status: 406)
+        elsif e.message == "Driver does not exist" || e.message == "Vehicle does not exist"
+          error_response(message: e.message, status: 404)
         else
           error_response(message: e.message, status: 500)
         end

@@ -6,8 +6,8 @@ RSpec.describe API::Base, type: :request do
       get '/api/v1/parking'
     end
 
+    include_examples 'successful request'
     it 'Gets info about parking lot and returns HTTP status 200' do
-      expect(response.status).to eq 200
       result = JSON.parse(response.body)
       expect(result.first.keys).to(match_array(%w(id for_bikes_only is_available spot_number)))
       expect(result.first['id']).to(eq(@parking_spot.id))
@@ -23,8 +23,9 @@ RSpec.describe API::Base, type: :request do
       @random_boolean = [true, false].sample
       post '/api/v1/parking', params: {"spot_number": @s_num, "for_bikes_only": @random_boolean}
     end
+    include_examples 'successful create request'
+
     it 'Create a new parking expect code to be 201' do
-      expect(response.status).to eq 201
       result = JSON.parse(response.body)
       expect(result.keys).to(match_array(%w(id for_bikes_only is_available spot_number)))
       expect(result['spot_number']).to(eq(@s_num))
@@ -48,9 +49,7 @@ RSpec.describe API::Base, type: :request do
       @parking_spot = create(:parking_spot)
       put '/api/v1/parking/' + @parking_spot.id.to_s + '/update', params: {"spot_number": 9, "for_bikes_only": true, "is_available": true}
     end
-    it 'updates parking spot expect code to be 201' do
-      expect(response.status).to eq 200
-    end
+    include_examples 'successful request'
   end
 
   context 'update parking spot with incomplete params' do
@@ -70,8 +69,8 @@ RSpec.describe API::Base, type: :request do
       @parking_spot = create(:parking_spot)
       delete '/api/v1/parking/' + @parking_spot.id.to_s + '/delete', params: {"is_available": true}
     end
+    include_examples 'successful request'
     it 'deletes parking spot expect code to be 200' do
-      expect(response.status).to eq 200
       result = JSON.parse(response.body)
       expect(result.keys).to(match_array(%w(id for_bikes_only is_available spot_number)))
       expect(result['id']).to(eq(@parking_spot.id))
