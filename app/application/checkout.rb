@@ -1,5 +1,4 @@
 class Checkout
-  require_relative "./exceptions"
   def initialize(vehicle_id)
     vehicle_obj = Vehicle.find_by(id: vehicle_id)
     unless vehicle_obj
@@ -18,6 +17,6 @@ class Checkout
   end
 
   def fetch_ticket
-   @ticket
-  end 
+    @ticket
+  end
 end

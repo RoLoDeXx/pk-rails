@@ -59,7 +59,7 @@ module API
         post '/:vehicle_id/checkin' do
           type = :ticket
           present Checkin.new(params[:vehicle_id]).fetch_ticket, with: API::V1::Entities::Vehicle, type: type
-          #  @ticket, 
+          #  @ticket,
         end
 
         desc 'check out from parking spot'

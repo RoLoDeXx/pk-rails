@@ -19,7 +19,7 @@ RSpec.describe Checkin, type: :model do
         @ticket = Checkin.new(@vehicle.id)
       end
       it "Expect to check in a vehicle" do
-        expect { @ticket.entry(@vehicle, @spot) }.to raise_error
+        expect { @ticket.entry(@vehicle, @spot) }.to raise_error(StandardError)
       end
     end
 

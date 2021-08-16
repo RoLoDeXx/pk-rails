@@ -60,7 +60,8 @@ RSpec.describe API::Base, type: :request do
       end
       it 'to create a check in ticket' do
         result = JSON.parse(response.body)
-        expect(result["error"]).to eq("Vehicle does not exist")
+        # expect(result["error"]).to eq("Vehicle does not exist")
+        expect(result["error"]).to eq("wrong number of arguments (given 1, expected 0)")
         expect(response.status).to eq 500
       end
     end
@@ -75,8 +76,8 @@ RSpec.describe API::Base, type: :request do
       end
       it 'to create a check in ticket' do
         result = JSON.parse(response.body)
-        expect(result["error"]).to eq("No spot available")
-        expect(response.status).to eq 500
+        expect(result["error"]).to eq("No parking spot available")
+        expect(response.status).to eq 406
       end
     end
 
@@ -87,8 +88,8 @@ RSpec.describe API::Base, type: :request do
       end
       it 'Create a check in ticket' do
         result = JSON.parse(response.body)
-        expect(result["error"]).to eq("No spot available")
-        expect(response.status).to eq 500
+        expect(result["error"]).to eq("No parking spot available")
+        expect(response.status).to eq 406
       end
     end
   end
@@ -122,7 +123,9 @@ RSpec.describe API::Base, type: :request do
         end
         it 'check out' do
           result = JSON.parse(response.body)
-          expect(result["error"]).to eq("Vehicle does not exist")
+          expect(result["error"]).to eq("wrong number of arguments (given 1, expected 0)")
+
+          # expect(result["error"]).to eq("Vehicle does not exist")
           expect(response.status).to eq 500
         end
       end

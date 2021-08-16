@@ -1,11 +1,11 @@
 class ParkingSpot < ApplicationRecord
   def self.get_empty_slot(vehicle)
-    if vehicle
+    # if vehicle
       spots = ParkingSpot.where(is_available: true, for_bikes_only: vehicle[:is_two_wheeler])
       spots.first
-    else
-      raise StandardError.new("Vehicle does not exist")
-    end
+    # else
+    #   raise NonExistentEntity.new.message("Vehicle ss")
+    # end
   end
 
   def parkable(vehicle_id)

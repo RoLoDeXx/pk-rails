@@ -1,5 +1,4 @@
 class Checkin
-  require_relative "./exceptions"
   def initialize(vehicle_id)
     vehicle_obj = Vehicle.find_by(id: vehicle_id)
     unless vehicle_obj
